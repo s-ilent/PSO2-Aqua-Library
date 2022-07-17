@@ -117,7 +117,11 @@ namespace AquaModelLibrary.NNStructs
                 genMat.texNames = new List<string>();
                 for(int t = 0; t < curMat.diffuseTexIds.Count; t++)
                 {
-                    genMat.texNames.Add(Path.ChangeExtension(texList[curMat.diffuseTexIds[t]], ".dds"));
+                    // Materials can reference texture -1 for "no texture"
+                    if (curMat.diffuseTexIds[t] >= 0)
+                    {
+                        genMat.texNames.Add(Path.ChangeExtension(texList[curMat.diffuseTexIds[t]], ".dds"));
+                    }
                 }
                 aqp.tempMats.Add(genMat);
             }
@@ -601,7 +605,7 @@ namespace AquaModelLibrary.NNStructs
             for(int i = 0; i < header.boneCount; i++)
             {
                 var node = new AquaNode.NODE();
-                if(boneNames.Count > i)
+                if(boneNames != null && boneNames.Count > i)
                 {
                     node.boneName.SetString(boneNames[i]);
                 } else
